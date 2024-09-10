@@ -1,5 +1,6 @@
 version: "3.8"
 services:
+  # SUBTITLES
   bazarr:
     image: linuxserver/bazarr:${BAZARR_VERSION}
     container_name: bazarr
@@ -21,6 +22,7 @@ services:
       - ${MEDIA_FOLDER}/Movies:/movies:z
       - ${MEDIA_FOLDER}/Series:/series:z
 
+  # BOOKS
   calibre:
     image: lscr.io/linuxserver/calibre:${CALIBRE_VERSION}
     container_name: calibre
@@ -40,6 +42,7 @@ services:
       - ${MEDIA_FOLDER}/Comics:/comics:z
       - ${MEDIA_FOLDER}/eBooks:/ebooks:z
 
+  # BOOKS
   calibre-web:
     image: linuxserver/calibre-web:${CALIBREWEB_VERSION}
     container_name: calibre-web
@@ -59,36 +62,7 @@ services:
       - ${MEDIA_FOLDER}/Comics:/comics:z
       - ${MEDIA_FOLDER}/eBooks:/ebooks:z
 
-  flaresolverr:
-    image: flaresolverr/flaresolverr:${FLARESOLVERR_VERSION}
-    container_name: flaresolverr
-    depends_on: ["${VPN_PROVIDER}"]
-    profiles: ["${FLARESOLVERR_PROFILE}"]
-    network_mode: service:${VPN_PROVIDER}
-    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
-    restart: unless-stopped
-    env_file: [".env", "${CONFIG_FOLDER}/flaresolverr/.env"]
-    environment: ["TZ:${TIMEZONE}"]
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${CONFIG_FOLDER}/jackett/config:/config:z
-
-  jackett:
-    image: linuxserver/jackett:${JACKETT_VERSION}
-    container_name: jackett
-    depends_on: ["${VPN_PROVIDER}"]
-    profiles: ["${JACKETT_PROFILE}"]
-    network_mode: service:${VPN_PROVIDER}
-    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
-    restart: unless-stopped
-    env_file: [".env", "${CONFIG_FOLDER}/jackett/.env"]
-    environment:
-      ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${CONFIG_FOLDER}/jackett/config:/config:z
-      - ${TORRENT_BLACKHOLE_FOLDER}:/blackhole:z
-
+  # BOOKS METADATA
   lazylibrarian:
     image: linuxserver/lazylibrarian:${LAZYLIBRARIAN_VERSION}
     container_name: lazylibrarian
@@ -117,6 +91,7 @@ services:
       - ${MEDIA_FOLDER}/Comics:/comics:z
       - ${MEDIA_FOLDER}/eBooks:/ebooks:z
 
+  # MUSIC
   lidarr:
     image: linuxserver/lidarr:${LIDARR_VERSION}
     container_name: lidarr
@@ -139,6 +114,8 @@ services:
       - ${USENET_DOWNLOADS_FOLDER}/completed/Music:/downloads/completed/Music:z
       - ${MEDIA_FOLDER}/Music:/music:z
 
+  
+  # COMICS
   mylar:
     image: linuxserver/mylar3:${MYLAR_VERSION}
     container_name: mylar
@@ -163,64 +140,7 @@ services:
       - ${USENET_DOWNLOADS_FOLDER}:/downloads/usenet:z
       - ${MEDIA_FOLDER}/Comics:/comics:z
 
-  nginx:
-    image: nginx:${NGINX_VERSION}
-    container_name: nginx
-    depends_on: ["${VPN_PROVIDER}"]
-    profiles: ["${NGINX_PROFILE}"]
-    network_mode: service:${VPN_PROVIDER}
-    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
-    restart: unless-stopped
-    env_file: [".env", "${CONFIG_FOLDER}/nginx/.env"]
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
-      - ${CONFIG_FOLDER}/nginx/templates:/etc/nginx/templates:z
-
-  nordvpn:
-    image: ghcr.io/bubuntux/nordvpn:${NORDVPN_VERSION}
-    container_name: nordvpn
-    restart: unless-stopped
-    profiles: ["${NORDVPN_PROFILE}"]
-    env_file: [".env", "${CONFIG_FOLDER}/nordvpn/.env"]
-    cap_add: [NET_ADMIN, NET_RAW]
-    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - ${BAZARR_HTTP_PORT}:${BAZARR_HTTP_PORT} # bazarr-http
-      - ${CALIBRE_DESKTOP_HTTP_PORT}:${CALIBRE_DESKTOP_HTTP_PORT} # calibre-desktop-http
-      - ${CALIBRE_GUI_WEB_HTTP_PORT}:${CALIBRE_GUI_WEB_HTTP_PORT} # calibre-web-gui-http
-      - ${CALIBRE_DESKTOP_HTTPS_PORT}:${CALIBRE_DESKTOP_HTTPS_PORT} # calibre-desktop-https
-      - ${CALIBRE_WEB_CONTAINER_HTTP_PORT}:${CALIBRE_WEB_CONTAINER_HTTP_PORT} # calibre-web-http (from calibre-web container)
-      - ${CALIBRE_WEB_CONTAINER_HTTPS_PORT}:${CALIBRE_WEB_CONTAINER_HTTPS_PORT} # calibre-web-https (from calibre-web container)
-      - ${FLARESOLVERR_HTTP_PORT}:${FLARESOLVERR_HTTP_PORT} # flaresolverr-http
-      - ${JACKETT_HTTP_PORT}:${JACKETT_HTTP_PORT} # jackett-http
-      - ${LAZYLIBRARIAN_HTTP_PORT}:${LAZYLIBRARIAN_HTTP_PORT} # lazylibrarian-http
-      - ${LAZYLIBRARIAN_HTTPS_PORT}:${LAZYLIBRARIAN_HTTPS_PORT} # lazylibrarian-https
-      - ${LIDARR_HTTP_PORT}:${LIDARR_HTTP_PORT} # lidarr-http
-      - ${LIDARR_HTTPS_PORT}:${LIDARR_HTTPS_PORT} # lidarr-https
-      - ${MYLAR_HTTP_PORT}:${MYLAR_HTTP_PORT} # mylar-http
-      - ${MYLAR_HTTPS_PORT}:${MYLAR_HTTPS_PORT} # mylar-https
-      - ${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT} # nginx-http
-      - ${NGINX_HTTPS_PORT}:${NGINX_HTTPS_PORT} # nginx-https
-      - ${NZBGET_HTTP_PORT}:${NZBGET_HTTP_PORT} # nzbget-http
-      - ${NZBGET_HTTPS_PORT}:${NZBGET_HTTPS_PORT} # nzbget-https
-      - ${NZBHYDRA2_HTTP_PORT}:${NZBHYDRA2_HTTP_PORT} # nzbhydra2-http
-      - ${NZBHYDRA2_HTTPS_PORT}:${NZBHYDRA2_HTTPS_PORT} # nzbhydra2-https
-      - ${PROWLARR_HTTP_PORT}:${PROWLARR_HTTP_PORT} # prowlarr-http
-      - ${PROWLARR_HTTPS_PORT}:${PROWLARR_HTTPS_PORT} # prowlarr-https
-      - ${QBITTORRENT_HTTP_PORT}:${QBITTORRENT_HTTP_PORT} # qbittorrent-http
-      - ${QBITTORRENT_HTTPS_PORT}:${QBITTORRENT_HTTPS_PORT} # qbittorrent-https
-      - ${QBITTORRENT_PORT}:${QBITTORRENT_PORT} # qbittorrent-torrent
-      - ${QBITTORRENT_PORT}:${QBITTORRENT_PORT}/udp # qbittorrent-torrent
-      - ${RADARR_HTTP_PORT}:${RADARR_HTTP_PORT} # radarr-http
-      - ${RADARR_HTTPS_PORT}:${RADARR_HTTPS_PORT} # radarr-https
-      - ${READARR_HTTP_PORT}:${READARR_HTTP_PORT} # readarr-http
-      - ${READARR_HTTPS_PORT}:${READARR_HTTPS_PORT} # readarr-https
-      - ${SONARR_HTTP_PORT}:${SONARR_HTTP_PORT} # sonarr-http
-      - ${SONARR_HTTPS_PORT}:${SONARR_HTTPS_PORT} # sonarr-https
-
+  # USENET DOWNLOADER
   nzbget:
     image: linuxserver/nzbget:${NZBGET_VERSION}
     container_name: nzbget
@@ -263,27 +183,30 @@ services:
       - ${TORRENT_BLACKHOLE_FOLDER}:/downloads/torrent/blackhole:z
       - ${USENET_BLACKHOLE_FOLDER}:/downloads/usenet/blackhole:z
 
-  plex:
-    image: linuxserver/plex:${PLEX_VERSION}
-    container_name: plex
-    # depends_on: ["${VPN_PROVIDER}"]
-    profiles: ["${PLEX_PROFILE}"]
-    network_mode: host # change to service:${VPN_PROVIDER} if you want in the same network as others
-    # sysctls: ["net.ipv6.conf.all.disable_ipv6=1"] # uncomment if changed to service:${VPN_PROVIDER} in network_mode
-    restart: unless-stopped
-    # Leave commented unless your machine is capable of Hardware acceleration - Intel / Nvidia
-    # More information at; https://github.com/linuxserver/docker-plex#hardware-acceleration
-    # devices: [ "/dev/dri:/dev/dri" ] # Intel QuickSync
-    env_file: [".env", "${CONFIG_FOLDER}/plex/.env"]
-    environment:
-      ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${CONFIG_FOLDER}/plex/config:/config:z
-      - ${CONFIG_FOLDER}/plex/transcode:/transcode:z
-      - ${MEDIA_FOLDER}/Series:/data/Series:z
-      - ${MEDIA_FOLDER}/Movies:/data/Movies:z
-      - ${MEDIA_FOLDER}/Music:/data/Music:z
+  
+  # JDOWNLOADER2  TODO
+  # jdownloader:
+  #   image: antlafarge/jdownloader:<TAG>
+  #   container_name: <CONTAINER-NAME> # Optional
+  #   restart: <RESTART> # Optional
+  #   user: <UID>:<GID> # Optional
+  #   volumes:
+  #     - "<DOWNLOADS-PATH>:/jdownloader/downloads/"
+  #     - "<CONFIG-PATH>:/jdownloader/cfg/" # Optional
+  #     - "<LOGS-PATH>:/jdownloader/logs/" # Optional
+  #   environment:
+  #     - "JD_EMAIL=<JD-EMAIL>" # Optional (better to use secrets)
+  #     - "JD_PASSWORD=<JD-PASSWORD>" # Optional (better to use secrets)
+  #     - "JD_DEVICENAME=<JD-DEVICENAME>" # Optional
+  #     - "UMASK=<UMASK>" # Optional
+  #     - "JAVA_OPTIONS=<JAVA-OPTIONS>" # Optional
+  #     - "LOG_FILE=<LOG-FILE>" # Optional
+  #   secrets:
+  #       - JD_EMAIL
+  #       - JD_PASSWORD
+  #       - JD_DEVICENAME # Optional
+  #   ports:
+  #     - "<PORT>:3129" # Optional
 
   protonvpn:
     image: ghcr.io/tprasadtp/protonwire:${PROTONVPN_VERSION}
@@ -305,21 +228,16 @@ services:
       - ${CALIBRE_WEB_CONTAINER_HTTP_PORT}:${CALIBRE_WEB_CONTAINER_HTTP_PORT} # calibre-web-http (from calibre-web container)
       - ${CALIBRE_WEB_CONTAINER_HTTPS_PORT}:${CALIBRE_WEB_CONTAINER_HTTPS_PORT} # calibre-web-https (from calibre-web container)
       - ${FLARESOLVERR_HTTP_PORT}:${FLARESOLVERR_HTTP_PORT} # flaresolverr-http
-      - ${JACKETT_HTTP_PORT}:${JACKETT_HTTP_PORT} # jackett-http
       - ${LAZYLIBRARIAN_HTTP_PORT}:${LAZYLIBRARIAN_HTTP_PORT} # lazylibrarian-http
       - ${LAZYLIBRARIAN_HTTPS_PORT}:${LAZYLIBRARIAN_HTTPS_PORT} # lazylibrarian-https
       - ${LIDARR_HTTP_PORT}:${LIDARR_HTTP_PORT} # lidarr-http
       - ${LIDARR_HTTPS_PORT}:${LIDARR_HTTPS_PORT} # lidarr-https
       - ${MYLAR_HTTP_PORT}:${MYLAR_HTTP_PORT} # mylar-http
       - ${MYLAR_HTTPS_PORT}:${MYLAR_HTTPS_PORT} # mylar-https
-      - ${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT} # nginx-http
-      - ${NGINX_HTTPS_PORT}:${NGINX_HTTPS_PORT} # nginx-https
       - ${NZBGET_HTTP_PORT}:${NZBGET_HTTP_PORT} # nzbget-http
       - ${NZBGET_HTTPS_PORT}:${NZBGET_HTTPS_PORT} # nzbget-https
       - ${NZBHYDRA2_HTTP_PORT}:${NZBHYDRA2_HTTP_PORT} # nzbhydra2-http
       - ${NZBHYDRA2_HTTPS_PORT}:${NZBHYDRA2_HTTPS_PORT} # nzbhydra2-https
-      - ${PROWLARR_HTTP_PORT}:${PROWLARR_HTTP_PORT} # prowlarr-http
-      - ${PROWLARR_HTTPS_PORT}:${PROWLARR_HTTPS_PORT} # prowlarr-https
       - ${QBITTORRENT_HTTP_PORT}:${QBITTORRENT_HTTP_PORT} # qbittorrent-http
       - ${QBITTORRENT_HTTPS_PORT}:${QBITTORRENT_HTTPS_PORT} # qbittorrent-https
       - ${QBITTORRENT_PORT}:${QBITTORRENT_PORT} # qbittorrent-torrent
@@ -330,32 +248,12 @@ services:
       - ${READARR_HTTPS_PORT}:${READARR_HTTPS_PORT} # readarr-https
       - ${SONARR_HTTP_PORT}:${SONARR_HTTP_PORT} # sonarr-http
       - ${SONARR_HTTPS_PORT}:${SONARR_HTTPS_PORT} # sonarr-https
+      - ${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT}
+      - ${EMBY_HTTP_PORT}:${EMBY_HTTP_PORT}
 
-  prowlarr:
-    image: linuxserver/prowlarr:${PROWLARR_VERSION}
-    container_name: prowlarr
-    depends_on: ["${VPN_PROVIDER}"]
-    profiles: ["${PROWLARR_PROFILE}"]
-    network_mode: service:${VPN_PROVIDER}
-    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
-    restart: unless-stopped
-    env_file: [".env", "${CONFIG_FOLDER}/prowlarr/.env"]
-    environment:
-      ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
-      - ${CONFIG_FOLDER}/prowlarr/config:/config:z
-      - ${RECYCLE_FOLDER}/prowlarr:/recycle:z
-      - ${USENET_BLACKHOLE_FOLDER}:/blackhole:z
-      - ${USENET_DOWNLOADS_FOLDER}:/downloads:z
-      - ${MEDIA_FOLDER}/AudioBooks:/audiobooks:z
-      - ${MEDIA_FOLDER}/Comics:/comics:z
-      - ${MEDIA_FOLDER}/eBooks:/ebooks:z
-      - ${MEDIA_FOLDER}/Movies:/movies:z
-      - ${MEDIA_FOLDER}/Music:/music:z
-      - ${MEDIA_FOLDER}/Series:/series:z
 
+
+  # TORRENTS
   qbittorrent:
     image: linuxserver/qbittorrent:${QBITTORRENT_VERSION}
     container_name: qbittorrent
@@ -379,6 +277,7 @@ services:
       - ${MEDIA_FOLDER}/Music:/music:z
       - ${MEDIA_FOLDER}/Series:/tv:z
 
+  # MOVIES
   radarr:
     image: linuxserver/radarr:${RADARR_VERSION}
     container_name: radarr
@@ -401,6 +300,7 @@ services:
       - ${USENET_DOWNLOADS_FOLDER}/completed/Movies:/downloads/completed/Movies:z
       - ${MEDIA_FOLDER}/Movies:/movies:z
 
+  # BOOK MANAGER
   readarr:
     image: linuxserver/readarr:${READARR_VERSION}
     container_name: readarr
@@ -425,6 +325,7 @@ services:
       - ${MEDIA_FOLDER}/Comics:/comics:z
       - ${MEDIA_FOLDER}/eBooks:/books:z
 
+  # TV SHOWS
   sonarr:
     image: linuxserver/sonarr:${SONARR_VERSION}
     container_name: sonarr
@@ -446,3 +347,27 @@ services:
       - ${USENET_DOWNLOADS_FOLDER}:/downloads/usenet:z
       - ${USENET_DOWNLOADS_FOLDER}/completed/Series:/downloads/completed/Series:z
       - ${MEDIA_FOLDER}/Series:/series:z
+
+  # MEDIA SERVER
+  emby:
+    image: linuxserver/emby:latest
+    container_name: emby
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Prague
+    volumes:
+      - /path/to/emby/library:/config
+      - /path/to/tvshows:/data/tvshows
+      - /path/to/movies:/data/movies
+      - /opt/vc/lib:/opt/vc/lib #optional
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+    devices:
+      - /dev/dri:/dev/dri #optional
+      - /dev/vchiq:/dev/vchiq #optional
+      - /dev/video10:/dev/video10 #optional
+      - /dev/video11:/dev/video11 #optional
+      - /dev/video12:/dev/video12 #optional
+    restart: unless-stopped
