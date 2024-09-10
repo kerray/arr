@@ -504,8 +504,8 @@ services:
     #     - JD_EMAIL
     #     - JD_PASSWORD
     #     - JD_DEVICENAME # Optional
-    ports:
-      - "${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT}" # Optional
+    #ports:
+    #  - "${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT}" # Optional
 
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:${AUDIOBOOKSHELF_VERSION}
@@ -513,11 +513,12 @@ services:
     profiles: ["${AUDIOBOOKSHELF_PROFILE}"]
     network_mode: host
     # sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
-    ports:
-      - ${AUDIOBOOKSHELF_HTTP_PORT}:80
+    #ports:
+    #  - ${AUDIOBOOKSHELF_HTTP_PORT}:80
     volumes:
       - ${MEDIA_FOLDER}/AudioBooks:/audiobooks:z
       - ${CONFIG_FOLDER}/audiobookshelf:/config
       - ${METADATA_FOLDER}:/metadata
     environment:
       - TZ=${TIMEZONE}
+      - PORT=13378
