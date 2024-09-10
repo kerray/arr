@@ -332,8 +332,8 @@ services:
       - ${READARR_HTTPS_PORT}:${READARR_HTTPS_PORT} # readarr-https
       - ${SONARR_HTTP_PORT}:${SONARR_HTTP_PORT} # sonarr-http
       - ${SONARR_HTTPS_PORT}:${SONARR_HTTPS_PORT} # sonarr-https
-      - ${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT} 
-      - ${EMBY_HTTP_PORT}:${EMBY_HTTP_PORT} 
+      #- ${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT} 
+      #- ${EMBY_HTTP_PORT}:${EMBY_HTTP_PORT} 
 
 
   prowlarr:
