@@ -470,8 +470,8 @@ services:
       - ${MEDIA_FOLDER}/Music:/music:z
       - ${MEDIA_FOLDER}/Series:/tv:z
       #- /opt/vc/lib:/opt/vc/lib #optional
-    ports:
-      - ${EMBY_HTTP_PORT}:${EMBY_HTTP_PORT}
+    #ports:
+    #  - ${EMBY_HTTP_PORT}:${EMBY_HTTP_PORT}
       #- 8920:8920 #optional
     # devices:
     #   - /dev/dri:/dev/dri #optional
@@ -487,7 +487,7 @@ services:
     restart: unless-stopped
     profiles: ["${JDOWNLOADER_PROFILE}"]
     user: ${UID}:${GID} # Optional
-    network_mode: service:${VPN_PROVIDER}
+    network_mode: host
     sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
     volumes:
       - ${JDOWNLOADER_DOWNLOADS_FOLDER}:/jdownloader/downloads/"
