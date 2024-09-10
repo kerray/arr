@@ -220,6 +220,8 @@ services:
       - ${READARR_HTTPS_PORT}:${READARR_HTTPS_PORT} # readarr-https
       - ${SONARR_HTTP_PORT}:${SONARR_HTTP_PORT} # sonarr-http
       - ${SONARR_HTTPS_PORT}:${SONARR_HTTPS_PORT} # sonarr-https
+      - ${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT} 
+      - ${EMBY_HTTP_PORT}:${EMBY_HTTP_PORT} 
 
   nzbget:
     image: linuxserver/nzbget:${NZBGET_VERSION}
@@ -330,6 +332,9 @@ services:
       - ${READARR_HTTPS_PORT}:${READARR_HTTPS_PORT} # readarr-https
       - ${SONARR_HTTP_PORT}:${SONARR_HTTP_PORT} # sonarr-http
       - ${SONARR_HTTPS_PORT}:${SONARR_HTTPS_PORT} # sonarr-https
+      - ${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT} 
+      - ${EMBY_HTTP_PORT}:${EMBY_HTTP_PORT} 
+
 
   prowlarr:
     image: linuxserver/prowlarr:${PROWLARR_VERSION}
@@ -446,3 +451,58 @@ services:
       - ${USENET_DOWNLOADS_FOLDER}:/downloads/usenet:z
       - ${USENET_DOWNLOADS_FOLDER}/completed/Series:/downloads/completed/Series:z
       - ${MEDIA_FOLDER}/Series:/series:z
+
+  emby:
+    image: lscr.io/linuxserver/emby:${EMBY_VERSION}
+    container_name: emby
+    profiles: ["${EMBY_PROFILE}"]
+    network_mode: service:${VPN_PROVIDER}
+    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${CONFIG_FOLDER}/emby:/config
+      - ${MEDIA_FOLDER}/AudioBooks:/audiobooks:z
+      - ${MEDIA_FOLDER}/eBooks:/books:z
+      - ${MEDIA_FOLDER}/Movies:/movies:z
+      - ${MEDIA_FOLDER}/Music:/music:z
+      - ${MEDIA_FOLDER}/Series:/tv:z
+      #- /opt/vc/lib:/opt/vc/lib #optional
+    ports:
+      - ${EMBY_PORT}:${EMBY_PORT}
+      #- 8920:8920 #optional
+    # devices:
+    #   - /dev/dri:/dev/dri #optional
+    #   - /dev/vchiq:/dev/vchiq #optional
+    #   - /dev/video10:/dev/video10 #optional
+    #   - /dev/video11:/dev/video11 #optional
+    #   - /dev/video12:/dev/video12 #optional
+    restart: unless-stopped
+
+
+  jdownloader:
+    image: antlafarge/jdownloader:${JDOWNLOADER_VERSION}
+    container_name: jdownloader
+    restart: unless-stopped
+    user: ${UID}:${GID} # Optional
+    network_mode: service:${VPN_PROVIDER}
+    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
+    volumes:
+      - ${JDOWNLOADER_DOWNLOADS_FOLDER}:/jdownloader/downloads/"
+      - ${CONFIG_FOLDER}/jdownloader:/jdownloader/cfg/" # Optional
+      #- "<LOGS-PATH>:/jdownloader/logs/" # Optional
+    environment:
+      - "JD_EMAIL=${JD_EMAIL}" # Optional (better to use secrets)
+      - "JD_PASSWORD=${JD-PASSWORD}" # Optional (better to use secrets)
+      - "JD_DEVICENAME=${JD-DEVICENAME}" # Optional
+      - "UMASK=${UMASK}" # Optional
+      #- "JAVA_OPTIONS=<JAVA-OPTIONS>" # Optional
+      #- "LOG_FILE=<LOG-FILE>" # Optional
+    # secrets:
+    #     - JD_EMAIL
+    #     - JD_PASSWORD
+    #     - JD_DEVICENAME # Optional
+    ports:
+      - "${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT}" # Optional

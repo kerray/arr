@@ -13,7 +13,7 @@ backup:
 
 clean:
 	@echo "Stopping and removing containers (if they are running)..."
-	@docker-compose --profile enabled down
+	@docker compose --profile enabled down
 
 	@echo "Reverting git files to orignal"
 	@sudo git clean -fdx
@@ -38,7 +38,7 @@ detect_secrets_create_baseline:
 
 down:
 	@echo "Stopping containers (if they are running)..."
-	@docker-compose --profile enabled down
+	@docker compose --profile enabled down
 
 generate_certificate:
 	@echo -n "Generating self-signed certificate..."
@@ -53,29 +53,29 @@ pre_commit:
 
 pull_docker_images:
 	@echo "Pulling Docker Images..."
-	@docker-compose --profile enabled pull
+	@docker compose --profile enabled pull
 
 restart:
 	@echo "Re-starting containers..."
-	@docker-compose --profile enabled restart
+	@docker compose --profile enabled restart
 
 start:
 	@echo "Starting containers..."
-	@docker-compose --profile enabled up --detach
+	@docker compose --profile enabled up --detach
 
 stop:
 	@echo "Stopping containers (if they are running)..."
-	@docker-compose --profile enabled stop
+	@docker compose --profile enabled stop
 
 update_containers:
 	@echo "Stopping Docker Containers..."
-	@docker-compose --profile enabled stop
+	@docker compose --profile enabled stop
 
 	@echo "Pulling Docker Images..."
-	@docker-compose pull
+	@docker compose pull
 
 	@echo "Starting containers..."
-	@docker-compose --profile enabled up --detach
+	@docker compose --profile enabled up --detach
 
 update_pre_commit:
 	@echo "Updating pre-commit hooks..."
