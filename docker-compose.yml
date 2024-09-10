@@ -498,14 +498,9 @@ services:
       - "JD_PASSWORD=${JD_PASSWORD}" # Optional (better to use secrets)
       - "JD_DEVICENAME=${JD_DEVICENAME}" # Optional
       - "UMASK=${UMASK}" # Optional
+      - "PORT=${JDOWNLOADER_HTTP_PORT}" # Optional
       #- "JAVA_OPTIONS=<JAVA-OPTIONS>" # Optional
       #- "LOG_FILE=<LOG-FILE>" # Optional
-    # secrets:
-    #     - JD_EMAIL
-    #     - JD_PASSWORD
-    #     - JD_DEVICENAME # Optional
-    #ports:
-    #  - "${JDOWNLOADER_HTTP_PORT}:${JDOWNLOADER_HTTP_PORT}" # Optional
 
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:${AUDIOBOOKSHELF_VERSION}
