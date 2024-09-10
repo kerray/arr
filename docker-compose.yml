@@ -509,6 +509,7 @@ services:
 
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:${AUDIOBOOKSHELF_VERSION}
+    container_name: audiobookshelf
     restart: unless-stopped
     profiles: ["${AUDIOBOOKSHELF_PROFILE}"]
     network_mode: host
