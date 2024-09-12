@@ -13,7 +13,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/bazarr/config:/config:z
       - ${RECYCLE_FOLDER}/bazarr:/recycle:z
       - ${USENET_BLACKHOLE_FOLDER}:/blackhole:z
@@ -53,7 +53,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/calibre-web/config:/config:z
       - ${MEDIA_FOLDER}/AudioBooks:/audiobooks:z
       - ${MEDIA_FOLDER}/Comics:/comics:z
@@ -106,7 +106,7 @@ services:
       DOCKER_MODS: ghcr.io/linuxserver/mods:universal-calibre|linuxserver/mods:lazylibrarian-ffmpeg #needed for calibredb
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/lazylibrarian/config:/config:z
       - ${TORRENT_BLACKHOLE_FOLDER}:/torrent/blackhole:z
       - ${TORRENT_DOWNLOADS_FOLDER}:/downloads/torrent:z
@@ -130,7 +130,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/lidarr/config:/config:z
       - ${RECYCLE_FOLDER}/lidarr:/recycle:z
       - ${TORRENT_DOWNLOADS_FOLDER}:/downloads/torrent:z
@@ -157,7 +157,7 @@ services:
       INSTALL_PIP_PACKAGES: pyOpenSSL
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/mylar/config:/config:z
       - ${TORRENT_DOWNLOADS_FOLDER}:/downloads/torrent:z
       - ${USENET_DOWNLOADS_FOLDER}:/downloads/usenet:z
@@ -236,7 +236,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/nzbget/config:/config:z
       - ${USENET_BLACKHOLE_FOLDER}:/blackhole:z
       - ${USENET_DOWNLOADS_FOLDER}:/downloads:z
@@ -260,7 +260,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/nzbhydra2/config:/config:z
       - ${TORRENT_BLACKHOLE_FOLDER}:/downloads/torrent/blackhole:z
       - ${USENET_BLACKHOLE_FOLDER}:/downloads/usenet/blackhole:z
@@ -349,7 +349,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/prowlarr/config:/config:z
       - ${RECYCLE_FOLDER}/prowlarr:/recycle:z
       - ${USENET_BLACKHOLE_FOLDER}:/blackhole:z
@@ -374,7 +374,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/qbittorrent/config:/config:z
       - ${TORRENT_BLACKHOLE_FOLDER}:/blackhole:z
       - ${TORRENT_DOWNLOADS_FOLDER}:/downloads:z
@@ -397,7 +397,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/radarr/config:/config:z
       - ${RECYCLE_FOLDER}/radarr:/recycle:z
       - ${TORRENT_DOWNLOADS_FOLDER}:/downloads/torrent:z
@@ -419,7 +419,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/readarr/config:/config:z
       - ${RECYCLE_FOLDER}/readarr:/recycle:z
       - ${TORRENT_DOWNLOADS_FOLDER}:/downloads/torrent:z
@@ -443,7 +443,7 @@ services:
       ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CERTIFICATES_FOLDER}:/certs:ro
+      - ${CERTIFICATES_FOLDER}:${CERTIFICATES_FOLDER}:ro
       - ${CONFIG_FOLDER}/sonarr/config:/config:z
       - ${RECYCLE_FOLDER}/sonarr:/recycle:z
       - ${TORRENT_DOWNLOADS_FOLDER}/completed/Sonarr:/downloads/completed/Sonarr:z
