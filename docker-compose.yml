@@ -446,3 +446,21 @@ services:
       - ${USENET_DOWNLOADS_FOLDER}:/downloads/usenet:z
       - ${USENET_DOWNLOADS_FOLDER}/completed/Series:/downloads/completed/Series:z
       - ${MEDIA_FOLDER}/Series:/series:z
+
+# requests # TODO
+  ombi:
+    image: linuxserver/ombi:${OMBI_VERSION}
+    container_name: ombi
+    depends_on: ["${VPN_PROVIDER}"]
+    profiles: ["${OMBI_PROFILE}"]
+    network_mode: service:${VPN_PROVIDER}
+    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
+    restart: unless-stopped
+    env_file: [".env", "${CONFIG_FOLDER}/ombi/.env"]
+    environment:
+      ["PGID=${GID}", "PUID=${UID}", "UMASK=${UMASK}", "TZ=${TIMEZONE}"]
+    volumes:
+      - ${CONFIG_FOLDER}/ombi/config:/config:z
+
+# TODO 
+
