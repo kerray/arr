@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:${AUDIOBOOKSHELF_VERSION}
+    container_name: audiobookshelf
+    restart: unless-stopped
+    profiles: ["${AUDIOBOOKSHELF_PROFILE}"]
+    network_mode: host
+    volumes:
+      - ${MEDIA_FOLDER}/AudioBooks:/audiobooks:z
+      - ./config:/config
+      - ${METADATA_FOLDER}:/metadata
+    environment:
+      - TZ=${TIMEZONE}
+      - PORT=13378

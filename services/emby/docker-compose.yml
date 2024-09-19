@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  emby:
+    image: lscr.io/linuxserver/emby:${EMBY_VERSION}
+    container_name: emby
+    profiles: ["${EMBY_PROFILE}"]
+    network_mode: host
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ./config:/config
+      - ${MEDIA_FOLDER}/AudioBooks:/audiobooks:z
+      - ${MEDIA_FOLDER}/eBooks:/books:z
+      - ${MEDIA_FOLDER}/Movies:/movies:z
+      - ${MEDIA_FOLDER}/Music:/music:z
+      - ${MEDIA_FOLDER}/Series:/tv:z
+    restart: unless-stopped

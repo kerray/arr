@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  jdownloader:
+    image: antlafarge/jdownloader:${JDOWNLOADER_VERSION}
+    container_name: jdownloader
+    restart: unless-stopped
+    profiles: ["${JDOWNLOADER_PROFILE}"]
+    user: ${UID}:${GID}
+    network_mode: host
+    volumes:
+      - ${JDOWNLOADER_DOWNLOADS_FOLDER}:/jdownloader/downloads/
+      - ./config:/jdownloader/cfg/
+    environment:
+      - JD_EMAIL=${JD_EMAIL}
+      - JD_PASSWORD=${JD_PASSWORD}
+      - JD_DEVICENAME=${JD_DEVICENAME}
+      - UMASK=${UMASK}
+      - PORT=${JDOWNLOADER_HTTP_PORT}
